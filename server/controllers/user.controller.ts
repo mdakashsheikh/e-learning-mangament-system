@@ -18,10 +18,25 @@ export const registrationUser = CatchAsyncError(async(req: Request, res: Respons
 
         const isEmailExist = await userModel.findOne({ email });
         if(isEmailExist) {
-            
+            return next(new ErrorHandler('Email already exits', 400))
         }
+
+        const user:IRegistrationBody = {
+            name,
+            email,
+            password
+        }
+        const actovationToken = createActivationToken(user)
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400))
     }
 })
+
+interface IActivationToken {
+    token: string,
+}
+
+export const createActivationToken = (user: IUser): IActivationToken => {
+
+}
